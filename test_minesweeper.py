@@ -59,6 +59,44 @@ class TestMinesweeper(unittest.TestCase):
         sentence = ms.Sentence([(0,1), (0,2), (0,3)], 2)
         self.assertIsNone(sentence.known_safes())
 
+    def test_get_cell_neighbors(self):
+        msAi = ms.MinesweeperAI()
+
+        # Top-left's neighbor
+        cell = (0,0)
+        self.assertEqual(
+            msAi.get_cell_neighbors(cell),
+            [(0,1), (1,0), (1,1)]
+        )
+
+        # Top-Right's neighbor
+        cell = (0,7)
+        self.assertEqual(
+            msAi.get_cell_neighbors(cell),
+            [(0,6), (1,6), (1,7)]
+        )
+
+        # Bottom-Right's neighbor
+        cell = (7,7)
+        self.assertEqual(
+            msAi.get_cell_neighbors(cell),
+            [(6,6), (6,7), (7,6)]
+        )
+
+        # Bottom-Left's neighbor
+        cell = (7,0)
+        self.assertEqual(
+            msAi.get_cell_neighbors(cell),
+            [(6,0), (6,1), (7,1)]
+        )
+
+        # Center's neighbor
+        cell = (4,4)
+        self.assertEqual(
+            msAi.get_cell_neighbors(cell),
+            [(3,3), (3,4), (3,5), (4,3), (4,5), (5,3), (5,4), (5,5)]
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
