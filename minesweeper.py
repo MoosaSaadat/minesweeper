@@ -220,3 +220,16 @@ class MinesweeperAI():
             2) are not known to be mines
         """
         raise NotImplementedError
+
+    def get_cell_neighbors(self, cell):
+        i, j = cell
+        neighbors = []
+
+        for row in range(i-1, i+2):
+            for col in range(j-1, j+2):
+                if (row >= 0 and row < self.height) \
+                        and (col >= 0 and col < self.width) \
+                        and (row, col) != cell:
+                    neighbors.append((row, col))
+
+        return neighbors
