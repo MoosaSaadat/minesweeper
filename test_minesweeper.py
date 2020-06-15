@@ -49,5 +49,16 @@ class TestMinesweeper(unittest.TestCase):
         sentence = ms.Sentence([(0,1), (0,2), (0,3)], 2)
         self.assertIsNone(sentence.known_mines())
 
+    def test_known_safes(self):
+
+        # All are safe
+        sentence = ms.Sentence([(0,1), (0,2), (0,3)], 0)
+        self.assertEqual({(0,1), (0,2), (0,3)}, sentence.known_safes())
+
+        # Not known
+        sentence = ms.Sentence([(0,1), (0,2), (0,3)], 2)
+        self.assertIsNone(sentence.known_safes())
+
+
 if __name__ == "__main__":
     unittest.main()
