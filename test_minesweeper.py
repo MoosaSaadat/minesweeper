@@ -39,6 +39,15 @@ class TestMinesweeper(unittest.TestCase):
         # Check mine count
         self.assertEqual(2, sentence.count)
 
+    def test_known_mines(self):
+
+        # All are mines
+        sentence = ms.Sentence([(0,1), (0,2), (0,3)], 3)
+        self.assertEqual({(0,1), (0,2), (0,3)}, sentence.known_mines())
+
+        # Not known
+        sentence = ms.Sentence([(0,1), (0,2), (0,3)], 2)
+        self.assertIsNone(sentence.known_mines())
 
 if __name__ == "__main__":
     unittest.main()
