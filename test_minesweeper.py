@@ -65,37 +65,58 @@ class TestMinesweeper(unittest.TestCase):
         # Top-left's neighbor
         cell = (0,0)
         self.assertEqual(
-            msAi.get_cell_neighbors(cell),
+            msAi.get_cell_neighbors(cell, 0)[0],
             [(0,1), (1,0), (1,1)]
         )
 
         # Top-Right's neighbor
         cell = (0,7)
         self.assertEqual(
-            msAi.get_cell_neighbors(cell),
+            msAi.get_cell_neighbors(cell, 0)[0],
             [(0,6), (1,6), (1,7)]
         )
 
         # Bottom-Right's neighbor
         cell = (7,7)
         self.assertEqual(
-            msAi.get_cell_neighbors(cell),
+            msAi.get_cell_neighbors(cell, 0)[0],
             [(6,6), (6,7), (7,6)]
         )
 
         # Bottom-Left's neighbor
         cell = (7,0)
         self.assertEqual(
-            msAi.get_cell_neighbors(cell),
+            msAi.get_cell_neighbors(cell, 0)[0],
             [(6,0), (6,1), (7,1)]
         )
 
         # Center's neighbor
         cell = (4,4)
         self.assertEqual(
-            msAi.get_cell_neighbors(cell),
+            msAi.get_cell_neighbors(cell, 0)[0],
             [(3,3), (3,4), (3,5), (4,3), (4,5), (5,3), (5,4), (5,5)]
         )
+
+    def test_add_knowledge(self):
+
+        # # No neighbor mines
+        # msAi = ms.MinesweeperAI()
+        # msAi.add_knowledge((7,0), 0)
+        # sentence = ms.Sentence(msAi.get_cell_neighbors((7,0)), 0)
+        # self.assertEqual(msAi.knowledge, [sentence])
+
+        # # All neighbor mines
+        # msAi = ms.MinesweeperAI()
+        # msAi.add_knowledge((7,7), 3)
+        # sentence = ms.Sentence(msAi.get_cell_neighbors((7,7)), 3)
+        # self.assertEqual(msAi.knowledge, [sentence])
+
+        # Example case
+        msAi = ms.MinesweeperAI(3, 3)
+        msAi.add_knowledge((0,0), 1)
+        msAi.add_knowledge((0,1), 1)
+        msAi.add_knowledge((0,2), 1)
+        msAi.add_knowledge((2,1), 2)
 
 
 if __name__ == "__main__":
