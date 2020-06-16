@@ -197,12 +197,14 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
+        print("============================")
         # Mark cell as safe and add to moves_made
         self.mark_safe(cell)
         self.moves_made.add(cell)
 
         # Create and Add sentence to knowledge
-        neighbors = self.get_cell_neighbors(cell)
+        neighbors, count = self.get_cell_neighbors(cell, count)
+        print(f"neighbors: {neighbors}")
         sentence = Sentence(neighbors, count)
         self.knowledge.append(sentence)
 
@@ -268,6 +270,11 @@ class MinesweeperAI():
         self.remove_dups()
         self.remove_sures()
 
+        print(f"knowledge:")
+        for s in self.knowledge:
+            print(f"\t{s}")
+        print("============================\n")
+
     def make_safe_move(self):
         """
         Returns a safe cell to choose on the Minesweeper board.
@@ -288,7 +295,7 @@ class MinesweeperAI():
         """
         raise NotImplementedError
 
-    def get_cell_neighbors(self, cell):
+    def get_cell_neighbors(self, cell, count):
         i, j = cell
         neighbors = []
 
@@ -297,10 +304,13 @@ class MinesweeperAI():
                 if (row >= 0 and row < self.height) \
                 and (col >= 0 and col < self.width) \
                 and (row, col) != cell \
-                and (row, col) not in self.moves_made:
+                and (row, col) not in self.safes \
+                and (row, col) not in self.mines:
                     neighbors.append((row, col))
+                if (row, col) in self.mines:
+                    count -= 1
 
-        return neighbors
+        return neighbors, count
 
     def remove_dups(self):
         print(f"with dups: {[str(s) for s in self.knowledge]}")
