@@ -198,8 +198,75 @@ class MinesweeperAI():
                if they can be inferred from existing knowledge
         """
         # Mark cell as safe and add to moves_made
-        self.safes.add(cell)
+        self.mark_safe(cell)
         self.moves_made.add(cell)
+
+        # Create and Add sentence to knowledge
+        neighbors = self.get_cell_neighbors(cell)
+        sentence = Sentence(neighbors, count)
+        self.knowledge.append(sentence)
+
+        # Conclusion
+        new_inferences = []
+        for s in self.knowledge:
+            if s == sentence:
+                print("equal")
+            elif s.cells.issuperset(sentence.cells):
+                print(s)
+                print(sentence)
+                print("s is superset")
+                setDiff = s.cells-sentence.cells
+                # Known safes
+                if s.count == sentence.count:
+                    print("\tsafes")
+                    for safeFound in setDiff:
+                        self.mark_safe(safeFound)
+                # Known mines
+                elif len(setDiff) == s.count - sentence.count:
+                    print("\tmines")
+                    for mineFound in setDiff:
+                        self.mark_mine(mineFound)
+                # Known inference
+                else:
+                    print("\tinference")
+                    new_inferences.append(
+                        Sentence(setDiff, s.count - sentence.count)
+                    )
+            elif sentence.cells.issuperset(s.cells):
+                print(s)
+                print(sentence)
+                print("sentence is superset")
+                setDiff = sentence.cells-s.cells
+                # Known safes
+                if s.count == sentence.count:
+                    print("\tsafes")
+                    for safeFound in setDiff:
+                        self.mark_safe(safeFound)
+                # Known mines
+                elif len(setDiff) == sentence.count - s.count:
+                    print("\tmines")
+                    for mineFound in setDiff:
+                        self.mark_mine(mineFound)
+                # Known inference
+                else:
+                    print("\tinference")
+                    new_inferences.append(
+                        Sentence(setDiff, sentence.count - s.count)
+                    )
+            elif not sentence.cells.isdisjoint(s.cells):
+                print(s)
+                print(sentence)
+                print("both are disjoint")
+                setSame = sentence.cells.intersection(s.cells)
+                # Known mines
+                if len(setSame) == sentence.count == s.count:
+                    print("\tmines")
+                    for mineFound in setSame:
+                        self.mark_mine(mineFound)
+
+        self.knowledge.extend(new_inferences)
+        self.remove_dups()
+        self.remove_sures()
 
     def make_safe_move(self):
         """
@@ -228,8 +295,31 @@ class MinesweeperAI():
         for row in range(i-1, i+2):
             for col in range(j-1, j+2):
                 if (row >= 0 and row < self.height) \
-                        and (col >= 0 and col < self.width) \
-                        and (row, col) != cell:
+                and (col >= 0 and col < self.width) \
+                and (row, col) != cell \
+                and (row, col) not in self.moves_made:
                     neighbors.append((row, col))
 
         return neighbors
+
+    def remove_dups(self):
+        print(f"with dups: {[str(s) for s in self.knowledge]}")
+        unique_knowledge = []
+        for s in self.knowledge:
+            if s not in unique_knowledge:
+                unique_knowledge.append(s)
+        self.knowledge = unique_knowledge
+
+    def remove_sures(self):
+        final_knowledge = []
+        for s in self.knowledge:
+            final_knowledge.append(s)
+            if s.known_mines():
+                for mineFound in s.known_mines():
+                    self.mark_mine(mineFound)
+                final_knowledge.pop(-1)
+            if s.known_safes():
+                for safeFound in s.known_safes():
+                    self.mark_safe(safeFound)
+                final_knowledge.pop(-1)
+        self.knowledge = final_knowledge
