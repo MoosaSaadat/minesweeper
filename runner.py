@@ -12,6 +12,7 @@ MINES = 8
 BLACK = (0, 0, 0)
 GRAY = (180, 180, 180)
 WHITE = (255, 255, 255)
+PINK = (255, 192, 203)
 
 # Create game
 pygame.init()
@@ -120,7 +121,6 @@ while True:
 
             # Add a mine, flag, or number if needed
             if game.is_mine((i, j)) and lost:
-                # print(f">>>>> {(i,j)}, {mine_detonated}")
                 if (i,j) == mine_detonated:
                     screen.blit(mine_red, rect)
                 else:
@@ -135,7 +135,9 @@ while True:
                 neighborsTextRect = neighbors.get_rect()
                 neighborsTextRect.center = rect.center
                 screen.blit(neighbors, neighborsTextRect)
-
+            elif (i, j) in ai.safes:
+                pygame.draw.rect(screen, PINK, rect)
+                pygame.draw.rect(screen, WHITE, rect, 3)
             row.append(rect)
         cells.append(row)
 
