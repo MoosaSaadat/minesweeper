@@ -112,7 +112,8 @@ class TestMinesweeper(unittest.TestCase):
         # Unknown
         msAi = ms.MinesweeperAI()
         msAi.add_knowledge((0,0), 1)
-        self.assertEqual(msAi.knowledge, [ms.Sentence([(0,1),(1,0),(1,1)],1)])
+        sentence = ms.Sentence([(0,1),(1,0),(1,1)], 1)
+        self.assertEqual(msAi.knowledge, [sentence])
 
         # Example case
         msAi = ms.MinesweeperAI(3, 3)
@@ -122,6 +123,22 @@ class TestMinesweeper(unittest.TestCase):
         msAi.add_knowledge((2,1), 2)
         sentence = ms.Sentence({(2,0),(2,2)}, 1)
         self.assertEqual(msAi.knowledge, [sentence])
+
+    def test_make_safe_move(self):
+
+        # Have safe moves
+        msAi = ms.MinesweeperAI(3, 3)
+        msAi.add_knowledge((0,0), 1)
+        msAi.add_knowledge((0,1), 1)
+        msAi.add_knowledge((0,2), 1)
+        msAi.add_knowledge((2,1), 2)
+        self.assertIsNotNone(msAi.make_safe_move())
+
+        # No safe moves
+        msAi = ms.MinesweeperAI()
+        msAi.add_knowledge((7,7), 3)
+        self.assertIsNone(msAi.make_safe_move())
+
 
 if __name__ == "__main__":
     unittest.main()
