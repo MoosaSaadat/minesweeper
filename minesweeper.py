@@ -197,14 +197,12 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        print("============================")
         # Mark cell as safe and add to moves_made
         self.mark_safe(cell)
         self.moves_made.add(cell)
 
         # Create and Add sentence to knowledge
         neighbors, count = self.get_cell_neighbors(cell, count)
-        print(f"neighbors: {neighbors}")
         sentence = Sentence(neighbors, count)
         self.knowledge.append(sentence)
 
@@ -212,68 +210,47 @@ class MinesweeperAI():
         new_inferences = []
         for s in self.knowledge:
             if s == sentence:
-                print("equal")
+                continue
             elif s.cells.issuperset(sentence.cells):
-                print(s)
-                print(sentence)
-                print("s is superset")
                 setDiff = s.cells-sentence.cells
                 # Known safes
                 if s.count == sentence.count:
-                    print("\tsafes")
                     for safeFound in setDiff:
                         self.mark_safe(safeFound)
                 # Known mines
                 elif len(setDiff) == s.count - sentence.count:
-                    print("\tmines")
                     for mineFound in setDiff:
                         self.mark_mine(mineFound)
                 # Known inference
                 else:
-                    print("\tinference")
                     new_inferences.append(
                         Sentence(setDiff, s.count - sentence.count)
                     )
             elif sentence.cells.issuperset(s.cells):
-                print(s)
-                print(sentence)
-                print("sentence is superset")
                 setDiff = sentence.cells-s.cells
                 # Known safes
                 if s.count == sentence.count:
-                    print("\tsafes")
                     for safeFound in setDiff:
                         self.mark_safe(safeFound)
                 # Known mines
                 elif len(setDiff) == sentence.count - s.count:
-                    print("\tmines")
                     for mineFound in setDiff:
                         self.mark_mine(mineFound)
                 # Known inference
                 else:
-                    print("\tinference")
                     new_inferences.append(
                         Sentence(setDiff, sentence.count - s.count)
                     )
             elif not sentence.cells.isdisjoint(s.cells):
-                print(s)
-                print(sentence)
-                print("both are disjoint")
                 setSame = sentence.cells.intersection(s.cells)
                 # Known mines
                 if len(setSame) == sentence.count == s.count:
-                    print("\tmines")
                     for mineFound in setSame:
                         self.mark_mine(mineFound)
 
         self.knowledge.extend(new_inferences)
         self.remove_dups()
         self.remove_sures()
-
-        print(f"knowledge:")
-        for s in self.knowledge:
-            print(f"\t{s}")
-        print("============================\n")
 
     def make_safe_move(self):
         """
@@ -284,7 +261,10 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        raise NotImplementedError
+        safeCells = self.safes - self.moves_made
+        if not safeCells:
+            return None
+        return safeCells.pop()
 
     def make_random_move(self):
         """
@@ -293,8 +273,15 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        raise NotImplementedError
-
+        row = random.randrange(0, self.height)
+        col = random.randrange(0, self.width)
+        cell = (row, col)
+        while cell in self.moves_made or cell in self.mines:
+            row = random.randrange(0, self.height)
+            col = random.randrange(0, self.width)
+            cell = (row, col)
+        return cell
+               
     def get_cell_neighbors(self, cell, count):
         i, j = cell
         neighbors = []
@@ -313,7 +300,6 @@ class MinesweeperAI():
         return neighbors, count
 
     def remove_dups(self):
-        print(f"with dups: {[str(s) for s in self.knowledge]}")
         unique_knowledge = []
         for s in self.knowledge:
             if s not in unique_knowledge:
