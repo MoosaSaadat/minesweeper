@@ -99,17 +99,20 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_add_knowledge(self):
 
-        # # No neighbor mines
-        # msAi = ms.MinesweeperAI()
-        # msAi.add_knowledge((7,0), 0)
-        # sentence = ms.Sentence(msAi.get_cell_neighbors((7,0)), 0)
-        # self.assertEqual(msAi.knowledge, [sentence])
+        # No neighbor mines
+        msAi = ms.MinesweeperAI()
+        msAi.add_knowledge((7,0), 0)
+        self.assertEqual(msAi.knowledge, [])
 
-        # # All neighbor mines
-        # msAi = ms.MinesweeperAI()
-        # msAi.add_knowledge((7,7), 3)
-        # sentence = ms.Sentence(msAi.get_cell_neighbors((7,7)), 3)
-        # self.assertEqual(msAi.knowledge, [sentence])
+        # All neighbor mines
+        msAi = ms.MinesweeperAI()
+        msAi.add_knowledge((7,7), 3)
+        self.assertEqual(msAi.knowledge, [])
+
+        # Unknown
+        msAi = ms.MinesweeperAI()
+        msAi.add_knowledge((0,0), 1)
+        self.assertEqual(msAi.knowledge, [ms.Sentence([(0,1),(1,0),(1,1)],1)])
 
         # Example case
         msAi = ms.MinesweeperAI(3, 3)
@@ -117,7 +120,8 @@ class TestMinesweeper(unittest.TestCase):
         msAi.add_knowledge((0,1), 1)
         msAi.add_knowledge((0,2), 1)
         msAi.add_knowledge((2,1), 2)
-
+        sentence = ms.Sentence({(2,0),(2,2)}, 1)
+        self.assertEqual(msAi.knowledge, [sentence])
 
 if __name__ == "__main__":
     unittest.main()
