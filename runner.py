@@ -56,6 +56,9 @@ lost = False
 # Show instructions initially
 instructions = True
 
+# Autoplay game
+autoplay = False
+
 while True:
 
     # Check if game quit
@@ -87,12 +90,30 @@ while True:
             screen.blit(line, lineRect)
 
         # Play game button
-        buttonRect = pygame.Rect((width / 4), (3 / 4) * height, width / 2, 50)
+        buttonRect = pygame.Rect(
+            width * 0.1,
+            height * 0.65,
+            width * 0.35,
+            50
+        )
         buttonText = mediumFont.render("Play Game", True, BLACK)
         buttonTextRect = buttonText.get_rect()
         buttonTextRect.center = buttonRect.center
         pygame.draw.rect(screen, WHITE, buttonRect)
         screen.blit(buttonText, buttonTextRect)
+
+        # Autoplay button
+        autoBtnRect = pygame.Rect(
+            width * 0.55,
+            height * 0.65,
+            width * 0.35,
+            50
+        )
+        autoBtnText = mediumFont.render("Auto Play", True, BLACK)
+        autoBtnTextRect = autoBtnText.get_rect()
+        autoBtnTextRect.center = autoBtnRect.center
+        pygame.draw.rect(screen, WHITE, autoBtnRect)
+        screen.blit(autoBtnText, autoBtnTextRect)
 
         # Check if play button clicked
         click, _, _ = pygame.mouse.get_pressed()
@@ -100,6 +121,10 @@ while True:
             mouse = pygame.mouse.get_pos()
             if buttonRect.collidepoint(mouse):
                 instructions = False
+                time.sleep(0.3)
+            elif autoBtnRect.collidepoint(mouse):
+                instructions = False
+                autoplay = True
                 time.sleep(0.3)
 
         pygame.display.flip()
