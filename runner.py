@@ -56,6 +56,11 @@ lost = False
 # Show instructions initially
 instructions = True
 
+# Autoplay game
+autoplay = False
+autoplaySpeed = 0.3
+makeAiMove = False
+
 while True:
 
     # Check if game quit
@@ -145,27 +150,41 @@ while True:
             row.append(rect)
         cells.append(row)
 
+    # Autoplay Button
+    autoplayBtn = pygame.Rect(
+        (2 / 3) * width + BOARD_PADDING, BOARD_PADDING,
+        (width / 3) - BOARD_PADDING * 2, 50
+    )
+    bText = "Autoplay" if not autoplay else "Stop"
+    buttonText = mediumFont.render(bText, True, BLACK)
+    buttonRect = buttonText.get_rect()
+    buttonRect.center = autoplayBtn.center
+    pygame.draw.rect(screen, WHITE, autoplayBtn)
+    screen.blit(buttonText, buttonRect)
+
     # AI Move button
     aiButton = pygame.Rect(
-        (2 / 3) * width + BOARD_PADDING, (1 / 3) * height - 50,
+        (2 / 3) * width + BOARD_PADDING, BOARD_PADDING + 70,
         (width / 3) - BOARD_PADDING * 2, 50
     )
     buttonText = mediumFont.render("AI Move", True, BLACK)
     buttonRect = buttonText.get_rect()
     buttonRect.center = aiButton.center
-    pygame.draw.rect(screen, WHITE, aiButton)
-    screen.blit(buttonText, buttonRect)
+    if not autoplay:
+        pygame.draw.rect(screen, WHITE, aiButton)
+        screen.blit(buttonText, buttonRect)
 
     # Reset button
     resetButton = pygame.Rect(
-        (2 / 3) * width + BOARD_PADDING, (1 / 3) * height + 20,
+        (2 / 3) * width + BOARD_PADDING, BOARD_PADDING + 140,
         (width / 3) - BOARD_PADDING * 2, 50
     )
     buttonText = mediumFont.render("Reset", True, BLACK)
     buttonRect = buttonText.get_rect()
     buttonRect.center = resetButton.center
-    pygame.draw.rect(screen, WHITE, resetButton)
-    screen.blit(buttonText, buttonRect)
+    if not autoplay:
+        pygame.draw.rect(screen, WHITE, resetButton)
+        screen.blit(buttonText, buttonRect)
 
     # Display text
     text = "Lost" if lost else "Won" if game.mines == flags else ""
@@ -179,7 +198,7 @@ while True:
     left, _, right = pygame.mouse.get_pressed()
 
     # Check for a right-click to toggle flagging
-    if right == 1 and not lost:
+    if right == 1 and not lost and not autoplay:
         mouse = pygame.mouse.get_pos()
         for i in range(HEIGHT):
             for j in range(WIDTH):
@@ -193,18 +212,17 @@ while True:
     elif left == 1:
         mouse = pygame.mouse.get_pos()
 
+        # If Autoplay button clicked, toggle autoplay
+        if autoplayBtn.collidepoint(mouse):
+            print(f"{autoplay} -> ", end="")
+            autoplay = not autoplay
+            print(autoplay)
+            time.sleep(0.2)
+            continue
+
         # If AI button clicked, make an AI move
-        if aiButton.collidepoint(mouse) and not lost:
-            move = ai.make_safe_move()
-            if move is None:
-                move = ai.make_random_move()
-                if move is None:
-                    flags = ai.mines.copy()
-                    print("No moves left to make.")
-                else:
-                    print("No known safe moves, AI making random move.")
-            else:
-                print("AI making safe move.")
+        elif aiButton.collidepoint(mouse) and not lost:
+            makeAiMove = True
             time.sleep(0.2)
 
         # Reset game state
@@ -226,11 +244,32 @@ while True:
                             and (i, j) not in revealed):
                         move = (i, j)
 
+    # If autoplay, make move with AI
+    if autoplay or makeAiMove:
+        if makeAiMove:
+            makeAiMove = False
+        move = ai.make_safe_move()
+        if move is None:
+            move = ai.make_random_move()
+            if move is None:
+                flags = ai.mines.copy()
+                print("No moves left to make.")
+                autoplay = False
+            else:
+                print("No known safe moves, AI making random move.")
+        else:
+            print("AI making safe move.")
+
+        # Add delay for autoplay
+        if autoplay:
+            time.sleep(autoplaySpeed)
+
     # Make move and update AI knowledge
     if move:
         if game.is_mine(move):
             lost = True
             mine_detonated = move
+            autoplay = False
         else:
             nearby = game.nearby_mines(move)
             revealed.add(move)
