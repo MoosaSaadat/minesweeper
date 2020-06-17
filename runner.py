@@ -36,6 +36,11 @@ flag = pygame.image.load("assets/images/flag.png")
 flag = pygame.transform.scale(flag, (cell_size, cell_size))
 mine = pygame.image.load("assets/images/mine.png")
 mine = pygame.transform.scale(mine, (cell_size, cell_size))
+mine_red = pygame.image.load("assets/images/mine-red.png")
+mine_red = pygame.transform.scale(mine_red, (cell_size, cell_size))
+
+# Detonated mine
+mine_detonated = None
 
 # Create game and AI agent
 game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
@@ -115,7 +120,11 @@ while True:
 
             # Add a mine, flag, or number if needed
             if game.is_mine((i, j)) and lost:
-                screen.blit(mine, rect)
+                # print(f">>>>> {(i,j)}, {mine_detonated}")
+                if (i,j) == mine_detonated:
+                    screen.blit(mine_red, rect)
+                else:
+                    screen.blit(mine, rect)
             elif (i, j) in flags:
                 screen.blit(flag, rect)
             elif (i, j) in revealed:
@@ -199,6 +208,7 @@ while True:
             revealed = set()
             flags = set()
             lost = False
+            mine_detonated = None
             continue
 
         # User-made move
@@ -214,6 +224,7 @@ while True:
     if move:
         if game.is_mine(move):
             lost = True
+            mine_detonated = move
         else:
             nearby = game.nearby_mines(move)
             revealed.add(move)
