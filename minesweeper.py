@@ -264,7 +264,9 @@ class MinesweeperAI():
         safeCells = self.safes - self.moves_made
         if not safeCells:
             return None
-        return safeCells.pop()
+        print(f"Pool: {safeCells}")
+        move = safeCells.pop()
+        return move
 
     def make_random_move(self):
         """
@@ -273,14 +275,17 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        row = random.randrange(0, self.height)
-        col = random.randrange(0, self.width)
-        cell = (row, col)
-        while cell in self.moves_made or cell in self.mines:
-            row = random.randrange(0, self.height)
-            col = random.randrange(0, self.width)
-            cell = (row, col)
-        return cell
+        all_moves = set()
+        for i in range(self.height):
+            for j in range(self.width):
+                if (i,j) not in self.mines and (i,j) not in self.moves_made:
+                    all_moves.add((i,j))
+        # No moves left
+        if len(all_moves) == 0:
+            return None
+        # Return available
+        move = random.choice(tuple(all_moves))
+        return move
                
     def get_cell_neighbors(self, cell, count):
         i, j = cell
@@ -314,7 +319,7 @@ class MinesweeperAI():
                 for mineFound in s.known_mines():
                     self.mark_mine(mineFound)
                 final_knowledge.pop(-1)
-            if s.known_safes():
+            elif s.known_safes():
                 for safeFound in s.known_safes():
                     self.mark_safe(safeFound)
                 final_knowledge.pop(-1)
