@@ -13,6 +13,7 @@ BLACK = (0, 0, 0)
 GRAY = (180, 180, 180)
 WHITE = (255, 255, 255)
 PINK = (255, 192, 203)
+RED = (255, 0, 0)
 
 # Create game
 pygame.init()
@@ -137,6 +138,9 @@ while True:
                 screen.blit(neighbors, neighborsTextRect)
             elif (i, j) in ai.safes:
                 pygame.draw.rect(screen, PINK, rect)
+                pygame.draw.rect(screen, WHITE, rect, 3)
+            elif (i, j) in ai.mines:
+                pygame.draw.rect(screen, RED, rect)
                 pygame.draw.rect(screen, WHITE, rect, 3)
             row.append(rect)
         cells.append(row)
