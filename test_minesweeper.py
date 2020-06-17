@@ -139,6 +139,17 @@ class TestMinesweeper(unittest.TestCase):
         msAi.add_knowledge((7,7), 3)
         self.assertIsNone(msAi.make_safe_move())
 
+    def test_make_random_move(self):
+
+        # Any move
+        msAi = ms.MinesweeperAI(3, 3)
+        msAi.add_knowledge((0,0), 1)
+        msAi.add_knowledge((0,1), 1)
+        msAi.add_knowledge((0,2), 1)
+        msAi.add_knowledge((2,1), 2)
+        move = msAi.make_random_move()
+        self.assertIsNotNone(move)
+
 
 if __name__ == "__main__":
     unittest.main()
