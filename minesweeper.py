@@ -241,12 +241,6 @@ class MinesweeperAI():
                     new_inferences.append(
                         Sentence(setDiff, sentence.count - s.count)
                     )
-            elif not sentence.cells.isdisjoint(s.cells):
-                setSame = sentence.cells.intersection(s.cells)
-                # Known mines
-                if len(setSame) == sentence.count == s.count:
-                    for mineFound in setSame:
-                        self.mark_mine(mineFound)
 
         self.knowledge.extend(new_inferences)
         self.remove_dups()
@@ -264,7 +258,7 @@ class MinesweeperAI():
         safeCells = self.safes - self.moves_made
         if not safeCells:
             return None
-        print(f"Pool: {safeCells}")
+        # print(f"Pool: {safeCells}")
         move = safeCells.pop()
         return move
 
