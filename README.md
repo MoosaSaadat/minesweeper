@@ -35,7 +35,7 @@ Other than the basic gameplay, this project offers the following features as wel
     <img src="assets/gui/gameplay-inference.png" alt="Gameplay with Inference"/>
 </p>
 <hr>
-<p align="center" style="font-size:12px;color:dimgray;">Autoplay with Inference Shown <span style="font-weight:bold;">(GIF)</span></p>
+<p align="center" style="font-size:12px;color:dimgray;">Autoplay with Inference Shown <strong>(GIF)</strong></p>
 <p align="center">
     <img src="assets/gui/autoplay.gif" alt="Autoplay"/>
 </p>
