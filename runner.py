@@ -230,9 +230,10 @@ while True:
 
         # If Autoplay button clicked, toggle autoplay
         if autoplayBtn.collidepoint(mouse):
-            print(f"{autoplay} -> ", end="")
-            autoplay = not autoplay
-            print(autoplay)
+            if not lost:
+                autoplay = not autoplay
+            else:
+                autoplay = False
             time.sleep(0.2)
             continue
 
