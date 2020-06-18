@@ -61,6 +61,9 @@ autoplay = False
 autoplaySpeed = 0.3
 makeAiMove = False
 
+# Show Safe and Mine Cells
+showSafesAndMines = False
+
 while True:
 
     # Check if game quit
@@ -190,8 +193,21 @@ while True:
     text = "Lost" if lost else "Won" if game.mines == flags else ""
     text = mediumFont.render(text, True, WHITE)
     textRect = text.get_rect()
-    textRect.center = ((5 / 6) * width, (2 / 3) * height)
+    textRect.center = ((5 / 6) * width, BOARD_PADDING + 232)
     screen.blit(text, textRect)
+
+    # Show Safes and Mines button
+    safesMinesButton = pygame.Rect(
+        (2 / 3) * width + BOARD_PADDING, BOARD_PADDING + 280,
+        (width / 3) - BOARD_PADDING * 2, 50
+    )
+    bText = "Show Inference" if not showSafesAndMines else "Hide Inference"
+    buttonText = smallFont.render(bText, True, BLACK)
+    buttonRect = buttonText.get_rect()
+    buttonRect.center = safesMinesButton.center
+    if not autoplay:
+        pygame.draw.rect(screen, WHITE, safesMinesButton)
+        screen.blit(buttonText, buttonRect)
 
     move = None
 
