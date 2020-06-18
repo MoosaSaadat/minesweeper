@@ -15,27 +15,27 @@ Other than the basic gameplay, this project offers the following features as wel
 - **Show Inference:** You can easily visualize the inferences made by the AI! It will color the cells that are confirmed as either *safe* (PINK) or *mine* (RED) so that you can *stay safe*!
 
 ## Screenshots
+<p align="center" style="font-size:12px;color:dimgray">Main Menu</p>
 <p align="center">
-    <p align="center" style="font-size:12px;color:dimgray">Main Menu</p>
     <img src="assets/gui/main-menu.png" alt="Main Menu"/>
 </p>
 <hr>
+<p align="center" style="font-size:12px;color:dimgray">Start Screen</p>
 <p align="center">
-    <p align="center" style="font-size:12px;color:dimgray">Start Screen</p>
     <img src="assets/gui/start-screen.png" alt="Start Screen"/>
 </p>
 <hr>
+<p align="center" style="font-size:12px;color:dimgray">Gameplay with Inference Hidden</p>
 <p align="center">
-    <p align="center" style="font-size:12px;color:dimgray">Gameplay with Inference Hidden</p>
     <img src="assets/gui/gameplay.png" alt="Gameplay"/>
 </p>
 <hr>
+<p align="center" style="font-size:12px;color:dimgray">Gameplay with Inference Shown</p>
 <p align="center">
-    <p align="center" style="font-size:12px;color:dimgray">Gameplay with Inference Shown</p>
     <img src="assets/gui/gameplay-inference.png" alt="Gameplay with Inference"/>
 </p>
 <hr>
+<p align="center" style="font-size:12px;color:dimgray">Autoplay with Inference Shown</p>
 <p align="center">
-    <p align="center" style="font-size:12px;color:dimgray">Autoplay with Inference Shown</p>
     <img src="assets/gui/autoplay.gif" alt="Autoplay"/>
 </p>
