@@ -1,5 +1,5 @@
 # Minesweeper
-### Harvard CS50's Introduction to Artificial Intelligence with Python (Project 0)
+### Harvard CS50's Introduction to Artificial Intelligence with Python (Project 1)
 
 Minesweeper game powered with an AI assistant to help you dodge all those dangerous mines!
 
