@@ -1,3 +1,9 @@
+![build-passing](https://img.shields.io/badge/Build-passing-success?style=flat-square)
+![test-passing](https://img.shields.io/badge/Tests-passing-success?style=flat-square)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-informational?style=flat-square)](https://www.python.org/)
+[![made-with-pygame](https://img.shields.io/badge/Made%20With-Pygame-informational?style=flat-square)](https://www.pygame.org/)
+
+
 # Minesweeper
 ### Harvard CS50's Introduction to Artificial Intelligence with Python (Project 1)
 
